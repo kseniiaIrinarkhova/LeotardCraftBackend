@@ -1,4 +1,6 @@
-import { Types, Document } from 'mongoose';
+import { Request } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
+import { Types, Document, ObjectId } from 'mongoose';
 
 //types and interfaces for main data entries
 /**
@@ -27,7 +29,25 @@ interface IUser extends Document {
     password:string
 }
 
-
+/**
+ * Interface for custom request in auth middleware
+ */
+interface ICustomRequest extends Request {
+    //token information
+    token?: string | IUserTokenPayload | JwtPayload;
+}
+/**
+ * Interface for user token payload
+ */
+interface IUserTokenPayload extends JwtPayload {
+    //user information
+    user: {
+        //id from database
+        _id: Types.ObjectId,
+        //username
+        username: string
+    }
+}
 
 //export
-export {IUser}
+export { IUser, ICustomRequest, IUserTokenPayload }

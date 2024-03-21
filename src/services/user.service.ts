@@ -1,13 +1,14 @@
-import { IUser } from '../types/main';
+import { IUser, IUserTokenPayload } from '../types/main';
 import UserModel from '../models/User.model'
 import bcrypt from 'bcrypt';
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import { jwtKey } from '../middleware/auth';
 import dotenv from "dotenv";
+import { ObjectId, TypeExpressionOperatorReturningObjectId, Types } from 'mongoose';
 dotenv.config();
 
-const jwtKey: Secret = process.env.JWT_TOKEN_KEY || 'Secret';
 
-export async function register(user: IUser): Promise<void> {
+ async function register(user: IUser): Promise<void> {
     try {
         //try to create a new user in database
         await UserModel.create(user);
@@ -16,7 +17,7 @@ export async function register(user: IUser): Promise<void> {
     }
 }
 
-export async function login(user: IUser) {
+ async function login(user: IUser) {
     try {
         //try to find requested username
         const foundUser = await UserModel.findOne({ username: user.username });
@@ -27,9 +28,9 @@ export async function login(user: IUser) {
         //if match - return user info and token
         if (isMatch) {
             //create payload with user ID and username information
-            const payload = {
+            const payload : IUserTokenPayload = {
                 user: { 
-                    id: foundUser._id?.toString(),
+                    _id: foundUser._id?.toString(),
                     username: foundUser.username
                  }
             }
@@ -47,3 +48,22 @@ export async function login(user: IUser) {
         throw error;
     }
 }
+
+/**
+ * Functiona that returns user data by ID
+ * @param id user id
+ * @returns user data without password
+ */
+async function getUserById(id: Types.ObjectId) {
+    try {
+        //try to find requested user
+        const foundUser = await UserModel.findOne({ _id: id }).select('-password');
+        //there is no such user in database
+        if (!foundUser) throw new Error("Oops, some issue with getting user data");
+        return { data: foundUser }
+    } catch (error) {
+        throw error;
+    }
+}
+
+export { register, login, getUserById }
