@@ -9,9 +9,12 @@ export async function register(user: IUser): Promise<void> {
     }
 }
 
-export async function login(user: IUser) {
+export async function login(user: IUser) : Promise<IUser> {
     try {
-        const foundUser = await UserModel.findOne({ name: user.username, password: user.password });
+        const foundUser = await UserModel.findOne({ username: user.username, password: user.password });
+        console.log(foundUser)
+        if (foundUser) return foundUser;
+        throw new Error("Invalid Credentials")
     } catch (error) {
         throw error;
     }

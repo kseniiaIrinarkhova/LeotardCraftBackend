@@ -28,7 +28,7 @@ export default class UserController {
     async loginOne(req: Request, res: Response){
         try {
             const foundUser = await userServices.login(req.body);
-            res.status(200).send({ data: foundUser });
+            res.status(200).json({ data: foundUser });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }

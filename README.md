@@ -40,5 +40,6 @@ Project prepared as a capstone project for **Software Engineering Bootcamp** at 
 - [How to set up TypeScript with Node.js and Express](https://blog.logrocket.com/how-to-set-up-node-typescript-express/)
 - [Easy MongoDB Mongoose Connection with TypeScript Nodejs and Express](https://thriveread.com/mongodb-mongoose-connection-with-typescript-nodejs-and-express/)
 - [Interfaces vs Types in TypeScript](https://blog.logrocket.com/types-vs-interfaces-typescript/)
+- [JWT Authentication in Typescript with Express](https://dev.to/juliecherner/authentication-with-jwt-tokens-in-typescript-with-express-3gb1)
 
 

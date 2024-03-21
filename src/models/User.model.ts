@@ -1,5 +1,8 @@
 import { Schema, model } from 'mongoose';
 import { IUser } from '../types/main';
+import bcrypt from 'bcrypt';
+
+const saltRounds = 10
 
 const userSchema = new Schema<IUser>({
     username: {
@@ -18,6 +21,14 @@ const userSchema = new Schema<IUser>({
         type: String,
         required: true
     }
+});
+
+userSchema.pre('save', async function (next) {
+    const user = this;
+    if (user.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, saltRounds);
+    }
+    next();
 });
 
 export default model<IUser>("User", userSchema);
