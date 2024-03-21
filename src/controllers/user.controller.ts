@@ -6,24 +6,7 @@ import { ICustomRequest, IUserTokenPayload } from '../types/main';
 export default class UserController {
     //CRUD operations for User
 
-    /**
-     * Get user information by ID
-     * @param req Request with token data
-     * @param res resonse
-     * @returns user data without password
-     */
-    async getUserInfo(req: ICustomRequest, res: Response) {
-        try {
-            //check if we recieved token ( we have to, as we call this path afte auth middleware)
-            if (!req.token) throw new Error("error with token")
-            //get user data
-            const user = await userServices.getUserById((req.token as IUserTokenPayload).user._id)
-            //return result
-            return res.status(201).json({ data: user });
-        } catch (err) {
-            return res.status(500).json({ message: getErrorMessage(err) });
-        }
-    }
+    
 
     /**
      * Create User in database
@@ -55,5 +38,35 @@ export default class UserController {
         }
     }
 
+    /**
+         * Get user information by ID
+         * @param req Request with token data
+         * @param res resonse
+         * @returns user data without password
+         */
+    async getUserInfo(req: ICustomRequest, res: Response) {
+        try {
+            //check if we recieved token ( we have to, as we call this path afte auth middleware)
+            if (!req.token) throw new Error("error with token")
+            //get user data
+            const user = await userServices.getUserById((req.token as IUserTokenPayload).user._id)
+            //return result
+            return res.status(200).json({ data: user });
+        } catch (err) {
+            return res.status(500).json({ message: getErrorMessage(err) });
+        }
+    }
 
+    async updateUser(req: ICustomRequest, res: Response){
+        try {
+            //check if we recieved token ( we have to, as we call this path afte auth middleware)
+            if (!req.token) throw new Error("error with token")
+            //get user data
+            const updatedUser = await userServices.updateUser(req.body, (req.token as IUserTokenPayload).user._id)
+            //return updated user
+            return res.status(200).send({ data: updatedUser, message: "User has been updated." });
+        } catch (err) {
+            return res.status(500).json({ message: getErrorMessage(err) });
+        }
+    }
 }

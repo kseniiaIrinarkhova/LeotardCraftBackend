@@ -29,6 +29,13 @@ interface IUser extends Document {
     password:string
 }
 
+type TUserUpdatedData = {
+    username?: string;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    password?: string
+}
 /**
  * Interface for custom request in auth middleware
  */
@@ -50,4 +57,4 @@ interface IUserTokenPayload extends JwtPayload {
 }
 
 //export
-export { IUser, ICustomRequest, IUserTokenPayload }
+export { IUser, ICustomRequest, IUserTokenPayload, TUserUpdatedData }

@@ -50,7 +50,7 @@ dotenv.config();
 }
 
 /**
- * Functiona that returns user data by ID
+ * Function that returns user data by ID
  * @param id user id
  * @returns user data without password
  */
@@ -60,10 +60,28 @@ async function getUserById(id: Types.ObjectId) {
         const foundUser = await UserModel.findOne({ _id: id }).select('-password');
         //there is no such user in database
         if (!foundUser) throw new Error("Oops, some issue with getting user data");
-        return { data: foundUser }
+        return foundUser 
     } catch (error) {
         throw error;
     }
 }
 
-export { register, login, getUserById }
+/**
+ * Function that update user data
+ * @param id user id
+ * @returns user data without password
+ */
+async function updateUser(changedData:any , id: Types.ObjectId) {
+    try {
+        //try to get user by id and change it
+        const updatedUser = await UserModel.findByIdAndUpdate({ _id: id }, changedData, { new: true }).select('-password');
+        if (!updatedUser) {
+            throw new Error("Requested User not found!");
+        }
+        return  updatedUser 
+    } catch (error) {
+        throw error;
+    }
+}
+
+export { register, login, getUserById, updateUser }

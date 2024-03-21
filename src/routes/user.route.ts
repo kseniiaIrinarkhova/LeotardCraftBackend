@@ -7,7 +7,8 @@ const userController = new UserController();
 
 //route for user account
 router.route('/account')
-.get(auth, userController.getUserInfo);
+.get(auth, userController.getUserInfo)
+.patch(auth, userController.updateUser)
 
 //user login route
 router.post('/login', userController.loginOne);
