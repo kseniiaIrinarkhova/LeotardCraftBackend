@@ -57,6 +57,12 @@ export default class UserController {
         }
     }
 
+    /**
+     * Update user data
+     * @param req request with token data
+     * @param res resonse
+     * @returns updated user data without password
+     */
     async updateUser(req: ICustomRequest, res: Response){
         try {
             //check if we recieved token ( we have to, as we call this path afte auth middleware)
@@ -65,6 +71,25 @@ export default class UserController {
             const updatedUser = await userServices.updateUser(req.body, (req.token as IUserTokenPayload).user._id)
             //return updated user
             return res.status(200).send({ data: updatedUser, message: "User has been updated." });
+        } catch (err) {
+            return res.status(500).json({ message: getErrorMessage(err) });
+        }
+    }
+
+    /**
+     * Delete user
+     * @param req request with token data
+     * @param res resonse
+     * @returns 
+     */
+    async deleteUser(req: ICustomRequest, res: Response) {
+        try {
+            //check if we recieved token ( we have to, as we call this path afte auth middleware)
+            if (!req.token) throw new Error("error with token")
+            //try to delete user and get information about deleted user
+            const deletedUser = await userServices.deleteUser((req.token as IUserTokenPayload).user._id)
+            //return information about deleted user
+            return res.status(200).send({ data: deletedUser, message: "User has been deleted." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }

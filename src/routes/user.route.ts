@@ -9,6 +9,7 @@ const userController = new UserController();
 router.route('/account')
 .get(auth, userController.getUserInfo)
 .patch(auth, userController.updateUser)
+.delete(auth, userController.deleteUser)
 
 //user login route
 router.post('/login', userController.loginOne);

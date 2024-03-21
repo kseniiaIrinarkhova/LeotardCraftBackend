@@ -68,6 +68,7 @@ async function getUserById(id: Types.ObjectId) {
 
 /**
  * Function that update user data
+ * @param changedData data from request body
  * @param id user id
  * @returns user data without password
  */
@@ -84,4 +85,22 @@ async function updateUser(changedData:any , id: Types.ObjectId) {
     }
 }
 
-export { register, login, getUserById, updateUser }
+/**
+ * Function that delete user from DB 
+ * @param id user id
+ * @returns user data without password
+ */
+async function deleteUser(id: Types.ObjectId) {
+    try {
+        //try to delete user by ID
+        const deletedUser = await UserModel.findByIdAndDelete({ _id: id }).select('-password');
+        if (!deletedUser) {
+            throw new Error("Requested User not found!");
+        }
+        return deletedUser
+    } catch (error) {
+        throw error;
+    }
+}
+
+export { register, login, getUserById, updateUser, deleteUser }
