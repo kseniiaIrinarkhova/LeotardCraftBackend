@@ -2,6 +2,9 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.config";
 
+//routes
+import userRoutes from './routes/user.route';
+
 dotenv.config();
 
 const app: Express = express();
@@ -19,6 +22,8 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", (req: Request, res: Response) => {
     res.send("Express + TypeScript Server");
 });
+
+app.use('/api/users', userRoutes);
 
 //Errors
 
