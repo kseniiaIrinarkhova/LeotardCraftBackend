@@ -74,7 +74,7 @@ interface IRhinestone extends Document{
     /**
          * Type of the rhinestone
          */
-    type: string;
+    type: RhinestonesType;
     /**
      * Information about rhinestones size
      */
@@ -89,6 +89,27 @@ interface IRhinestone extends Document{
     links: {url: String}[];
 }
 
+/**
+ * Interface for Fabric model
+ */
+interface IFabric extends Document{
+    /**
+     * foreign key to user
+     */
+    created_by: Types.ObjectId;
+    /**
+         * Type of the fabric
+         */
+    type: string;
+    /**
+     * Information about fabric color
+     */
+    color: string;
+    /**
+     * Additional links for resources
+     */
+    links: { url: String }[];
+}
 
 //export
-export { IUser, ICustomRequest, IUserTokenPayload, UserUpdatedData, IRhinestone, RhinestonesType }
+export { IUser, ICustomRequest, IUserTokenPayload, UserUpdatedData, IRhinestone, RhinestonesType, IFabric }

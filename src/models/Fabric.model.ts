@@ -1,11 +1,11 @@
 import { Model, Schema, model } from 'mongoose';
-import { IRhinestone } from '../types/main';
+import { IFabric } from '../types/main';
 
-interface IRhinestoneModel extends Model<IRhinestone>{
+interface IFabricModel extends Model<IFabric> {
 
 }
 
-const rhinestoneSchema = new Schema({
+const fabricSchema = new Schema({
     created_by: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -14,17 +14,7 @@ const rhinestoneSchema = new Schema({
 
     type: {
         type: String,
-        enum: [
-            'Sew on',
-            'HotFix',
-            'No HotFix'
-        ],
         required: [true, "Property 'type' should be provided"]
-    },
-
-    size: {
-        type: String,
-        required: [true, "Property 'size' should be provided"]
     },
 
     color: {
@@ -40,6 +30,6 @@ const rhinestoneSchema = new Schema({
     }],
 });
 
-const Rhinestone: IRhinestoneModel = model<IRhinestone, IRhinestoneModel>("Rhinestone", rhinestoneSchema);
+const Fabric: IFabricModel = model<IFabric, IFabricModel>("Fabric", fabricSchema);
 
-export default Rhinestone;
+export default Fabric;

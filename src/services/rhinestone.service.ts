@@ -5,10 +5,14 @@ import { Types } from 'mongoose';
 
 
 
-
+/**
+ * Function that creates rhinestone document in db
+ * @param rhinestone object
+ * @returns object from db
+ */
 async function createOne(rhinestone: IRhinestone) {
     try {
-        //try to create a new user in database
+        //try to create a new rhinestone in database
         const newRhinestone = await RhinestoneModel.create(rhinestone);
         return newRhinestone;
     } catch (error) {
@@ -16,7 +20,11 @@ async function createOne(rhinestone: IRhinestone) {
     }
 }
 
-
+/**
+ * Function that gets all rhinestone documents created by user from db
+ * @param created_by user ID
+ * @returns array of rhinestone objects
+ */
 async function getAllRhinestoneByUserID(created_by: Types.ObjectId) {
     try {
         //get all user's rhinestones from database
@@ -28,7 +36,11 @@ async function getAllRhinestoneByUserID(created_by: Types.ObjectId) {
     }
 }
 
-
+/**
+ * Function that gets rhinestone by ID from DB
+ * @param id rhinestone ID
+ * @returns rhinestone object
+ */
 async function getRhinestoneById(id: string) {
     try {
         //get rhinestone data
@@ -40,7 +52,12 @@ async function getRhinestoneById(id: string) {
     }
 }
 
-
+/**
+ * Function that changes data for rhinestone object with provided ID
+ * @param changedData changed data
+ * @param id rhinestone ID
+ * @returns changed rhinestone object
+ */
 async function updateRhinestone(changedData: any, id: string) {
     try {
         //try to update rhinestone data
@@ -52,7 +69,11 @@ async function updateRhinestone(changedData: any, id: string) {
     }
 }
 
-
+/**
+ * Function that delete rhinestone document with provided ID from DB
+ * @param id rhinestone ID
+ * @returns result of action
+ */
 async function deleteRhinestone(id: string) {
     try {
         //try to update rhinestone data
