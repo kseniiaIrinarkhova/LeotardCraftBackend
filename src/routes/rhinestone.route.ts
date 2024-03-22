@@ -18,4 +18,8 @@ router.route('/')
     .get(auth, rhinestoneController.getAllRhinestones)
     .post(auth,rhinestoneController.createRhinestone)
 
+//specific search routes
+router.get('/types/:type', auth, rhinestoneController.getRhinestoneByType)
+router.get('/colors/:color', auth, rhinestoneController.getRhinestoneByColor)
+
 export default router;

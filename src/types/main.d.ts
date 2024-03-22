@@ -198,5 +198,13 @@ type Note = {
      */
     created_date: Date;
 }
+
+interface IFilter {
+    created_by: Types.ObjectId;
+    [key?: string]: {
+        $regex: string,
+        $options: string 
+    } | Types.ObjectId
+}
 //export
-export { IUser, ICustomRequest, IUserTokenPayload, UserUpdatedData, IRhinestone, RhinestonesType, IFabric, IProject }
+export { IUser, ICustomRequest, IUserTokenPayload, UserUpdatedData, IRhinestone, RhinestonesType, IFabric, IProject, IFilter }

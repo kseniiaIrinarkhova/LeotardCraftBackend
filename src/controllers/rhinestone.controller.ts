@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { getErrorMessage } from '../utils/error.util';
 import * as rhinestoneServices from '../services/rhinestone.service';
 import { ICustomRequest, IRhinestone, IUserTokenPayload } from '../types/main';
@@ -27,7 +27,16 @@ export default class RhinestoneController {
      */
     async getAllRhinestones(req: ICustomRequest, res: Response) {
         try {
-            const userRhinestones = await rhinestoneServices.getAllRhinestoneByUserID((req.token as IUserTokenPayload).user._id);
+            //check query parameters
+            const type = req.query["type"] as string;
+            const color = req.query["color"] as string;
+            const size = req.query["size"] as string;
+
+            let userRhinestones: IRhinestone[];
+            if (!type && !color && !size)
+                userRhinestones = await rhinestoneServices.getAllRhinestoneByUserID((req.token as IUserTokenPayload).user._id);
+            else
+                userRhinestones = await rhinestoneServices.getRhinestonesWithFilters((req.token as IUserTokenPayload).user._id, type, color, size)
             return res.status(200).json({ data: userRhinestones });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
@@ -94,6 +103,44 @@ export default class RhinestoneController {
             const deletedRhinestone = await rhinestoneServices.deleteRhinestone(id, (req.token as IUserTokenPayload).user._id) 
             //return information about deleted user
             return res.status(200).send({ data: deletedRhinestone, message: "Rhinestone has been deleted." });
+        } catch (err) {
+            return res.status(500).json({ message: getErrorMessage(err) });
+        }
+    }
+    /**
+ * Get all rhinestone with specific type
+ * @param req request with token data
+ * @param res resonse
+ * @returns result of delete operation
+ */
+    async getRhinestoneByType(req: ICustomRequest, res: Response) {
+        try {
+            //check if we recieved token ( we have to, as we call this path afte auth middleware)
+            if (!req.token) throw new Error("error with token")
+            //get type parameter
+            const { type } = req.params;
+            //try to get rhinestone with this type
+            const result = await rhinestoneServices.getRhinestonesByType((req.token as IUserTokenPayload).user._id, type);
+            return res.status(200).send({ data: result });
+        } catch (err) {
+            return res.status(500).json({ message: getErrorMessage(err) });
+        }
+    }
+    /**
+    * Get all rhinestone with specific color
+    * @param req request with token data
+    * @param res resonse
+    * @returns result of delete operation
+    */
+    async getRhinestoneByColor(req: ICustomRequest, res: Response) {
+        try {
+            //check if we recieved token ( we have to, as we call this path afte auth middleware)
+            if (!req.token) throw new Error("error with token")
+            //get color parameter
+            const { color } = req.params;
+            //try to get rhinestone with this type
+            const result = await rhinestoneServices.getRhinestonesByColor((req.token as IUserTokenPayload).user._id, color);
+            return res.status(200).send({ data: result });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }

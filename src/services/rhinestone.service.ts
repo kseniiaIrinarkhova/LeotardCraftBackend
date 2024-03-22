@@ -2,18 +2,15 @@ import { IRhinestone } from '../types/main';
 import RhinestoneModel from '../models/Rhinestone.model'
 import { Types } from 'mongoose';
 
-
-
-
 /**
  * Function that creates rhinestone document in db
  * @param rhinestone object
  * @returns object from db
  */
 async function createOne(rhinestone: IRhinestone) {
-        //try to create a new rhinestone in database
-        const newRhinestone = await RhinestoneModel.create(rhinestone);
-        return newRhinestone;
+    //try to create a new rhinestone in database
+    const newRhinestone = await RhinestoneModel.create(rhinestone);
+    return newRhinestone;
 }
 
 /**
@@ -22,10 +19,10 @@ async function createOne(rhinestone: IRhinestone) {
  * @returns array of rhinestone objects
  */
 async function getAllRhinestoneByUserID(created_by: Types.ObjectId) {
-        //get all user's rhinestones from database
-        const result = await RhinestoneModel.find({ created_by: created_by });
-        //return list of object
-        return result;
+    //get all user's rhinestones from database
+    const result = await RhinestoneModel.find({ created_by: created_by });
+    //return list of object
+    return result;
 }
 
 /**
@@ -72,5 +69,48 @@ async function deleteRhinestone(id: string, created_by: Types.ObjectId) {
     //return list of object
     return result;
 }
+/**
+ * Function that finds rhinestone document with provided color from DB
+ * @param created_by user ID (user that try to update)
+ * @param color Rhinestone color
+ * @returns result of action
+ */
+async function getRhinestonesByColor(created_by: Types.ObjectId, color: string) {
+    //try to find rhinestones created by user with provided color
+    const result = await RhinestoneModel.findByColor(created_by, color);
+    //return list of object
+    return result;
+}
 
-export { createOne, getAllRhinestoneByUserID, getRhinestoneById, updateRhinestone, deleteRhinestone };
+/**
+ * Function that finds rhinestone document with provided type from DB
+ * @param created_by user ID (user that try to update) 
+ * @param type rhinestone type
+ * @returns result of action
+ */
+async function getRhinestonesByType(created_by: Types.ObjectId, type: string) {
+    //try to get rhinestone data
+    const result = await RhinestoneModel.findByType(created_by, type)
+    //return list of object
+    return result;
+}
+
+/**
+ * Function that finds rhinestone document with provided filters
+ * @param created_by user ID (user that try to update)
+ * @param type rhinestone type
+ * @param color Rhinestone color
+ * @returns result of action
+ */
+async function getRhinestonesWithFilters(created_by: Types.ObjectId, type: string = '', color: string = '', size: string = '') {
+    //create filter object
+    let filters = {
+        type: type,
+        color: color,
+        size: size
+    }
+    return await RhinestoneModel.findWithFilters(created_by, filters);
+
+}
+
+export { createOne, getAllRhinestoneByUserID, getRhinestoneById, updateRhinestone, deleteRhinestone, getRhinestonesByColor, getRhinestonesByType, getRhinestonesWithFilters };
