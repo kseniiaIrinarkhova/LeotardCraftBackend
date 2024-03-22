@@ -86,7 +86,7 @@ interface IRhinestone extends Document{
     /**
      * Additional links for resources
      */
-    url?: Array<{link: String}>;
+    links: {url: String}[];
 }
 
 

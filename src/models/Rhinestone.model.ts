@@ -32,8 +32,8 @@ const rhinestoneSchema = new Schema({
         required: [true, "Property 'color' should be provided"]
     },
 
-    url: [{
-        link: {
+    links: [{
+        url: {
             type: String,
             required: [true, "Property 'link' should be provided"]
         }
