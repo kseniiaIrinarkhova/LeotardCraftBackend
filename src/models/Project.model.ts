@@ -79,7 +79,12 @@ const projectSchema = new Schema({
             }
         }
     ],
-    
+    imgs: [{
+        url: {
+            type: String,
+            required: [true, "Property 'url' should be provided for images"]
+        }
+    }],
 });
 
 const Project: IProjectModel = model<IProject, IProjectModel>("Project", projectSchema);

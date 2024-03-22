@@ -27,7 +27,7 @@ interface IUser extends Document {
     /**
      * password
      */
-    password:string
+    password: string
 }
 
 type UserUpdatedData = {
@@ -67,7 +67,7 @@ enum RhinestonesType {
 }
 
 /**Interface for rhinestone */
-interface IRhinestone extends Document{
+interface IRhinestone extends Document {
     /**
      * foreign key to user
      */
@@ -87,13 +87,17 @@ interface IRhinestone extends Document{
     /**
      * Additional links for resources
      */
-    links: {url: String}[];
+    links: { url: String }[];
+    /**
+     * Links to images
+     */
+    imgs: { url: String }[];
 }
 
 /**
  * Interface for Fabric model
  */
-interface IFabric extends Document{
+interface IFabric extends Document {
     /**
      * foreign key to user
      */
@@ -110,12 +114,16 @@ interface IFabric extends Document{
      * Additional links for resources
      */
     links: { url: String }[];
+    /**
+     * Links to images
+     */
+    imgs: { url: String }[];
 }
 
 /**
  * Interface for Project
  */
-interface IProject extends Document{
+interface IProject extends Document {
     /**
          * foreign key to user
          */
@@ -131,11 +139,15 @@ interface IProject extends Document{
     /**
      * The list of fabrics and its amount that is used in project
      */
-    fabrics?:ProjectFabric[];
+    fabrics?: ProjectFabric[];
     /**
      * additional notes related to project
      */
     notes: Note[];
+    /**
+     * Links to images
+     */
+    imgs: { url: String }[];
 }
 
 /**
@@ -145,7 +157,7 @@ type ProjectRhinestone = {
     /**
          * foreign key to Rhinestone
          */
-    rhinestone_id: Types.ObjectId; 
+    rhinestone_id: Types.ObjectId;
     /**
      * amount of rhinestones
      */

@@ -25,7 +25,13 @@ const fabricSchema = new Schema({
     links: [{
         url: {
             type: String,
-            required: [true, "Property 'url' should be provided"]
+            required: [true, "Property 'url' should be provided for links"]
+        }
+    }],
+    imgs: [{
+        url: {
+            type: String,
+            required: [true, "Property 'url' should be provided for images"]
         }
     }],
 });
