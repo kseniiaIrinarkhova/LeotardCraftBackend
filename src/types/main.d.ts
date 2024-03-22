@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
-import { Types, Document, ObjectId } from 'mongoose';
+import { Types, Document, ObjectId, Date } from 'mongoose';
+import FabricController from '../controllers/fabric.controller';
 
 //types and interfaces for main data entries
 /**
@@ -111,5 +112,79 @@ interface IFabric extends Document{
     links: { url: String }[];
 }
 
+/**
+ * Interface for Project
+ */
+interface IProject extends Document{
+    /**
+         * foreign key to user
+         */
+    created_by: Types.ObjectId;
+    /**
+     * Project title
+     */
+    title: string;
+    /**
+     * The list of rhinestones and its amount that is used in project
+     */
+    rhinestones?: ProjectRhinestone[];
+    /**
+     * The list of fabrics and its amount that is used in project
+     */
+    fabrics?:ProjectFabric[];
+    /**
+     * additional notes related to project
+     */
+    notes: Note[];
+}
+
+/**
+ * Type for rhinestones in project
+ */
+type ProjectRhinestone = {
+    /**
+         * foreign key to Rhinestone
+         */
+    rhinestone_id: Types.ObjectId; 
+    /**
+     * amount of rhinestones
+     */
+    amount: number;
+    /**
+     * additional notes related to rhinestone
+     */
+    notes: Note[];
+}
+
+/**
+ * Type for fabrics in project
+ */
+type ProjectFabric = {
+    /**
+         * foreign key to Fabric
+         */
+    fabric_id: Types.ObjectId;
+    /**
+     * fabric quantity 
+     */
+    quantity: number;
+    /**
+     * additional notes related to fabric
+     */
+    notes: Note[];
+}
+/**
+ * type for notes
+ */
+type Note = {
+    /**
+     * note context
+     */
+    context: string;
+    /**
+     * date when created
+     */
+    created_date: Date;
+}
 //export
-export { IUser, ICustomRequest, IUserTokenPayload, UserUpdatedData, IRhinestone, RhinestonesType, IFabric }
+export { IUser, ICustomRequest, IUserTokenPayload, UserUpdatedData, IRhinestone, RhinestonesType, IFabric, IProject }

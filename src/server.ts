@@ -6,6 +6,7 @@ import connectDB from "./config/db.config";
 import userRoutes from './routes/user.route';
 import stoneRoutes from './routes/rhinestone.route';
 import fabricRoutes from './routes/fabric.route';
+import projectRoutes from './routes/project.route';
 
 dotenv.config();
 
@@ -31,6 +32,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/stones', stoneRoutes);
 //routes related with fabric
 app.use('/api/fabrics', fabricRoutes);
+//routes related with project
+app.use('/api/projects', projectRoutes);
 
 //Errors
 
