@@ -20,7 +20,7 @@ async function createOne(fabric: IFabric) {
  */
 async function getAllFabricByUserID(created_by: Types.ObjectId) {
         //get all user's fabrics from database
-        const result = await FabricModel.find({ created_by: created_by });
+        const result = await FabricModel.findByUserId(created_by);
         //return list of object
         return result;
 }
@@ -48,9 +48,9 @@ async function getFabricById(id: string) {
  */
 async function updateFabric(changedData: any, id: string, created_by: Types.ObjectId) {
         //try to update fabric data
-    const result = await FabricModel.findOneAndUpdate({ _id: id, created_by: created_by }, changedData, { new: true });
-    //if there is no such fabric or it is created by different user - throw error
-    if (result === null) throw new Error(`Update error. Current user did not create fabric with ID = ${id}`)
+        const result = await FabricModel.findOneAndUpdate({ _id: id, created_by: created_by }, changedData, { new: true });
+        //if there is no such fabric or it is created by different user - throw error
+        if (result === null) throw new Error(`Update error. Current user did not create fabric with ID = ${id}`)
         //return list of object
         return result;
 }
@@ -70,4 +70,44 @@ async function deleteFabric(id: string, created_by: Types.ObjectId) {
         return result;
 }
 
-export { createOne, getAllFabricByUserID, getFabricById, updateFabric, deleteFabric };
+/**
+ * Function that finds fabric document with provided color from DB
+ * @param created_by user ID (user that try to update)
+ * @param color Fabric color
+ * @returns result of action
+ */
+async function getFabricsByColor(created_by: Types.ObjectId, color: string) {
+        //try to find fabrics created by user with provided color
+        const result = await FabricModel.findByColor(created_by, color);
+        //return list of object
+        return result;
+}
+
+/**
+ * Function that finds fabric document with provided type from DB
+ * @param created_by user ID (user that try to update) 
+ * @param type fabric type
+ * @returns result of action
+ */
+async function getFabricsByType(created_by: Types.ObjectId, type: string) {
+        //try to get fabric data
+        const result = await FabricModel.findByType(created_by, type)
+        //return list of object
+        return result;
+}
+
+/**
+ * Function that finds fabric document with provided filters
+ * @param created_by user ID (user that try to update)
+ * @param type fabric type
+ * @param color Fabric color
+ * @returns result of action
+ */
+async function getFabricsWithFilters(created_by: Types.ObjectId, type: string, color: string) {
+        if (type && color) return await FabricModel.findByTypeAndColor(created_by, type, color);
+        if (type) return await FabricModel.findByType(created_by, type);
+        if (color) return await FabricModel.findByColor(created_by, color);
+        return await FabricModel.findByUserId(created_by);
+}
+
+export { createOne, getAllFabricByUserID, getFabricById, updateFabric, deleteFabric, getFabricsByColor, getFabricsByType, getFabricsWithFilters };
