@@ -8,10 +8,14 @@ import { ObjectId, TypeExpressionOperatorReturningObjectId, Types } from 'mongoo
 dotenv.config();
 
 
- async function register(user: IUser): Promise<void> {
+ async function register(user: IUser) {
     try {
         //try to create a new user in database
-        await UserModel.create(user);
+        const newUser = await UserModel.create(user);
+
+        //return jws token with paylod
+        return createToken(newUser._id, newUser.username);
+
     } catch (error) {
         throw error;
     }
@@ -27,20 +31,8 @@ dotenv.config();
         const isMatch = bcrypt.compareSync(user.password, foundUser.password);
         //if match - return user info and token
         if (isMatch) {
-            //create payload with user ID and username information
-            const payload : IUserTokenPayload = {
-                user: { 
-                    _id: foundUser._id?.toString(),
-                    username: foundUser.username
-                 }
-            }
-            //create token that would expire in 2 days
-            const token = jwt.sign(payload, jwtKey, {
-                expiresIn: '2 days',
-            });
-
             //return jws token with paylod
-            return { token: token };
+            return createToken(foundUser._id, foundUser.username);
         }
         //else throw an error
         throw new Error("Invalid Credentials")
@@ -104,3 +96,27 @@ async function deleteUser(id: Types.ObjectId) {
 }
 
 export { register, login, getUserById, updateUser, deleteUser }
+
+/**
+ * Helper function to create token
+ * @param _id user id from database
+ * @param username user name
+ * @returns Object with property 'token'
+ */
+function createToken(_id: Types.ObjectId, username: string) {
+    //create payload with user ID and username information
+    const payload: IUserTokenPayload = {
+        user: {
+            _id: _id,
+            username: username
+        }
+    }
+    //create token that would expire in 2 days
+    const token = jwt.sign(payload, jwtKey, {
+        expiresIn: '2 days',
+    });
+
+    //return jws token with paylod
+    return { token: token };
+
+}

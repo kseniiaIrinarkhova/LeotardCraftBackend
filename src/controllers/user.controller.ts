@@ -16,8 +16,8 @@ export default class UserController {
      */
     async registerOne(req: Request, res: Response) {
         try {
-            await userServices.register(req.body);
-            return res.status(201).json({ data: "new user", message: "User has beed created." });
+            const token = await userServices.register(req.body);
+            return res.status(201).json({ data: token, message: "User has beed created." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
