@@ -29,7 +29,7 @@ interface IUser extends Document {
     password:string
 }
 
-type TUserUpdatedData = {
+type UserUpdatedData = {
     username?: string;
     first_name?: string;
     last_name?: string;
@@ -43,6 +43,8 @@ interface ICustomRequest extends Request {
     //token information
     token?: string | IUserTokenPayload | JwtPayload;
 }
+
+
 /**
  * Interface for user token payload
  */
@@ -56,5 +58,37 @@ interface IUserTokenPayload extends JwtPayload {
     }
 }
 
+/**Rhinestones Types: "Sew-on", "HotFix", "No-HotFix" */
+enum RhinestonesType {
+    sew_on = 'Sew on',
+    hotfix = 'HotFix',
+    no_hotfix = 'No HotFix'
+}
+
+/**Interface for rhinestone */
+interface IRhinestone extends Document{
+    /**
+     * foreign key to user
+     */
+    created_by: Types.ObjectId;
+    /**
+         * Type of the rhinestone
+         */
+    type: string;
+    /**
+     * Information about rhinestones size
+     */
+    size: string;
+    /**
+     * Information about rhinestones color
+     */
+    color: string;
+    /**
+     * Additional links for resources
+     */
+    url?: Array<{link: String}>;
+}
+
+
 //export
-export { IUser, ICustomRequest, IUserTokenPayload, TUserUpdatedData }
+export { IUser, ICustomRequest, IUserTokenPayload, UserUpdatedData, IRhinestone, RhinestonesType }

@@ -27,7 +27,7 @@ export default class UserController {
      * Login by User
      * @param req Request
      * @param res Response
-     * @returns result or log in attempt
+     * @returns result of login attempt
      */
     async loginOne(req: Request, res: Response) {
         try {
@@ -41,7 +41,7 @@ export default class UserController {
     /**
          * Get user information by ID
          * @param req Request with token data
-         * @param res resonse
+         * @param res response
          * @returns user data without password
          */
     async getUserInfo(req: ICustomRequest, res: Response) {
@@ -60,7 +60,7 @@ export default class UserController {
     /**
      * Update user data
      * @param req request with token data
-     * @param res resonse
+     * @param res response
      * @returns updated user data without password
      */
     async updateUser(req: ICustomRequest, res: Response){
@@ -79,7 +79,7 @@ export default class UserController {
     /**
      * Delete user
      * @param req request with token data
-     * @param res resonse
+     * @param res response
      * @returns 
      */
     async deleteUser(req: ICustomRequest, res: Response) {

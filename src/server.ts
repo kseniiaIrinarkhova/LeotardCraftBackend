@@ -4,6 +4,7 @@ import connectDB from "./config/db.config";
 
 //routes
 import userRoutes from './routes/user.route';
+import stoneRoutes from './routes/rhinestone.route';
 
 dotenv.config();
 
@@ -23,7 +24,10 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Express + TypeScript Server");
 });
 
+//routes related with user information
 app.use('/api/users', userRoutes);
+//routes related with rhinestones
+app.use('/api/stones', stoneRoutes);
 
 //Errors
 

@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IUser, TUserUpdatedData } from '../types/main';
+import { IUser, UserUpdatedData } from '../types/main';
 import bcrypt from 'bcrypt';
 
 const saltRounds = 10
@@ -36,7 +36,7 @@ userSchema.pre('save', async function (next) {
 //hash password before updating
 userSchema.pre('findOneAndUpdate', async function (next) {
     //get updated data
-    const updData = this.getUpdate() as TUserUpdatedData
+    const updData = this.getUpdate() as UserUpdatedData
     //if password is supposed to be changed 
     if (updData.password) {
         //change it to hash
