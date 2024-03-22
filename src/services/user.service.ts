@@ -8,37 +8,27 @@ import { ObjectId, TypeExpressionOperatorReturningObjectId, Types } from 'mongoo
 dotenv.config();
 
 
- async function register(user: IUser) {
-    try {
-        //try to create a new user in database
-        const newUser = await UserModel.create(user);
-
-        //return jws token with paylod
-        return createToken(newUser._id, newUser.username);
-
-    } catch (error) {
-        throw error;
-    }
+async function register(user: IUser) {
+    //try to create a new user in database
+    const newUser = await UserModel.create(user);
+    //return jws token with paylod
+    return createToken(newUser._id, newUser.username);
 }
 
- async function login(user: IUser) {
-    try {
-        //try to find requested username
-        const foundUser = await UserModel.findOne({ username: user.username });
-        //there is no such user in database
-        if (!foundUser) throw new Error("Invalid Credentials");
-        //compare requested password with hashed one in database
-        const isMatch = bcrypt.compareSync(user.password, foundUser.password);
-        //if match - return user info and token
-        if (isMatch) {
-            //return jws token with paylod
-            return createToken(foundUser._id, foundUser.username);
-        }
-        //else throw an error
-        throw new Error("Invalid Credentials")
-    } catch (error) {
-        throw error;
+async function login(user: IUser) {
+    //try to find requested username
+    const foundUser = await UserModel.findOne({ username: user.username });
+    //there is no such user in database
+    if (!foundUser) throw new Error("Invalid Credentials");
+    //compare requested password with hashed one in database
+    const isMatch = bcrypt.compareSync(user.password, foundUser.password);
+    //if match - return user info and token
+    if (isMatch) {
+        //return jws token with paylod
+        return createToken(foundUser._id, foundUser.username);
     }
+    //else throw an error
+    throw new Error("Invalid Credentials")
 }
 
 /**
@@ -47,15 +37,11 @@ dotenv.config();
  * @returns user data without password
  */
 async function getUserById(id: Types.ObjectId) {
-    try {
-        //try to find requested user
-        const foundUser = await UserModel.findOne({ _id: id }).select('-password');
-        //there is no such user in database
-        if (!foundUser) throw new Error("Oops, some issue with getting user data");
-        return foundUser 
-    } catch (error) {
-        throw error;
-    }
+    //try to find requested user
+    const foundUser = await UserModel.findOne({ _id: id }).select('-password');
+    //there is no such user in database
+    if (!foundUser) throw new Error(`Get error. Can not find user with ID=${id}`);
+    return foundUser;
 }
 
 /**
@@ -64,17 +50,12 @@ async function getUserById(id: Types.ObjectId) {
  * @param id user id
  * @returns user data without password
  */
-async function updateUser(changedData:any , id: Types.ObjectId) {
-    try {
-        //try to get user by id and change it
-        const updatedUser = await UserModel.findByIdAndUpdate({ _id: id }, changedData, { new: true }).select('-password');
-        if (!updatedUser) {
-            throw new Error("Requested User not found!");
-        }
-        return  updatedUser 
-    } catch (error) {
-        throw error;
-    }
+async function updateUser(changedData: any, id: Types.ObjectId) {
+    //try to get user by id and change it
+    const updatedUser = await UserModel.findByIdAndUpdate({ _id: id }, changedData, { new: true }).select('-password');
+    //if there is no user with reqiested id - throw error
+    if (!updatedUser) throw new Error(`Update error. Can not find user with ID=${id}`);
+    return updatedUser
 }
 
 /**
@@ -83,16 +64,11 @@ async function updateUser(changedData:any , id: Types.ObjectId) {
  * @returns user data without password
  */
 async function deleteUser(id: Types.ObjectId) {
-    try {
         //try to delete user by ID
         const deletedUser = await UserModel.findByIdAndDelete({ _id: id }).select('-password');
-        if (!deletedUser) {
-            throw new Error("Requested User not found!");
-        }
+        //if there is no user with reqiested id - throw error
+        if (!deletedUser) throw new Error(`Delete error. Can not find user with ID=${id}`);
         return deletedUser
-    } catch (error) {
-        throw error;
-    }
 }
 
 export { register, login, getUserById, updateUser, deleteUser }

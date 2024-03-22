@@ -68,7 +68,7 @@ export default class FabricController {
             //get id parameter
             const { id } = req.params;
             //get rhinstone data
-            const updatedFabric = await fabricServices.updateFabric(req.body, id)
+            const updatedFabric = await fabricServices.updateFabric(req.body, id, (req.token as IUserTokenPayload).user._id)
             //return updated user
             return res.status(200).send({ data: updatedFabric, message: "Fabric has been updated." });
         } catch (err) {
@@ -89,7 +89,7 @@ export default class FabricController {
             //get id parameter
             const { id } = req.params;
             //try to delete rhinstone and get information about deleted rhinstone
-            const deletedFabric = await fabricServices.deleteFabric(id)
+            const deletedFabric = await fabricServices.deleteFabric(id, (req.token as IUserTokenPayload).user._id)
             //return information about deleted user
             return res.status(200).send({ data: deletedFabric, message: "Fabric has been deleted." });
         } catch (err) {

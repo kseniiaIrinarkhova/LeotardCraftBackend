@@ -70,7 +70,7 @@ export default class RhinestoneController {
             //get id parameter
             const { id } = req.params;
             //get rhinstone data
-            const updatedRhinestone = await rhinestoneServices.updateRhinestone(req.body, id)
+            const updatedRhinestone = await rhinestoneServices.updateRhinestone(req.body, id, (req.token as IUserTokenPayload).user._id )
             //return updated user
             return res.status(200).send({ data: updatedRhinestone, message: "Rhinestone has been updated." });
         } catch (err) {
@@ -91,7 +91,7 @@ export default class RhinestoneController {
             //get id parameter
             const { id } = req.params;
             //try to delete rhinstone and get information about deleted rhinstone
-            const deletedRhinestone = await rhinestoneServices.deleteRhinestone(id) 
+            const deletedRhinestone = await rhinestoneServices.deleteRhinestone(id, (req.token as IUserTokenPayload).user._id) 
             //return information about deleted user
             return res.status(200).send({ data: deletedRhinestone, message: "Rhinestone has been deleted." });
         } catch (err) {

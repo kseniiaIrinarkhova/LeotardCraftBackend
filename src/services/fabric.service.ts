@@ -8,13 +8,9 @@ import { Types } from 'mongoose';
  * @returns object from db
  */
 async function createOne(fabric: IFabric) {
-    try {
         //try to create a new fabric in database
         const newFabric = await FabricModel.create(fabric);
         return newFabric;
-    } catch (error) {
-        throw error;
-    }
 }
 
 /**
@@ -23,14 +19,10 @@ async function createOne(fabric: IFabric) {
  * @returns array of fabric objects
  */
 async function getAllFabricByUserID(created_by: Types.ObjectId) {
-    try {
         //get all user's fabrics from database
         const result = await FabricModel.find({ created_by: created_by });
         //return list of object
         return result;
-    } catch (err) {
-        return err;
-    }
 }
 
 /**
@@ -39,47 +31,43 @@ async function getAllFabricByUserID(created_by: Types.ObjectId) {
  * @returns fabric object
  */
 async function getFabricById(id: string) {
-    try {
         //get fabric data
         const result = await FabricModel.findById({ _id: id });
+        //if there is no such fabric
+        if (result === null) throw new Error(`Get error. There is no fabric with ID = ${id}`)
         //return list of object
         return result;
-    } catch (err) {
-        return err;
-    }
 }
 
 /**
  * Function that changes data for fabric object with provided ID
  * @param changedData changed data
  * @param id fabric ID
+ * @param created_by user ID (user that try to update)
  * @returns changed fabric object
  */
-async function updateFabric(changedData: any, id: string) {
-    try {
+async function updateFabric(changedData: any, id: string, created_by: Types.ObjectId) {
         //try to update fabric data
-        const result = await FabricModel.findByIdAndUpdate({ _id: id }, changedData, { new: true });
+    const result = await FabricModel.findOneAndUpdate({ _id: id, created_by: created_by }, changedData, { new: true });
+    //if there is no such fabric or it is created by different user - throw error
+    if (result === null) throw new Error(`Update error. Current user did not create fabric with ID = ${id}`)
         //return list of object
         return result;
-    } catch (err) {
-        return err;
-    }
 }
 
 /**
  * Function that delete fabric document with provided ID from DB
  * @param id fabric ID
+ * @param created_by user ID (user that try to update)
  * @returns result of action
  */
-async function deleteFabric(id: string) {
-    try {
+async function deleteFabric(id: string, created_by: Types.ObjectId) {
         //try to update fabric data
-        const result = await FabricModel.findByIdAndDelete({ _id: id });
+        const result = await FabricModel.findOneAndDelete({ _id: id, created_by: created_by });
+        //if there is no such fabric or it is created by different user - throw error
+        if (result === null) throw new Error(`Delete error. Current user did not create fabric with ID = ${id}`)
         //return list of object
         return result;
-    } catch (err) {
-        return err;
-    }
 }
 
 export { createOne, getAllFabricByUserID, getFabricById, updateFabric, deleteFabric };
