@@ -5,7 +5,7 @@ import FabricController from '../controllers/fabric.controller';
 
 //types and interfaces for main data entries
 /**
- * User type
+ * User interface
  */
 interface IUser extends Document {
     /**
@@ -199,8 +199,13 @@ type Note = {
     created_date: Date;
 }
 
+/**
+ * Interface for filter object
+ */
 interface IFilter {
+    //static field
     created_by: Types.ObjectId;
+    //dynamic fields based on user request
     [key?: string]: {
         $regex: string,
         $options: string 
