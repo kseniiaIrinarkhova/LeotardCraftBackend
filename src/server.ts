@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.config";
+import cors from "cors"
 
 //routes
 import userRoutes from './routes/user.route';
@@ -19,6 +20,8 @@ const connectionString: string = process.env.ATLAS_URI || "";
 app.use(express.json());
 //parse incoming requests with urlencoded payloads and is based on body-parser
 app.use(express.urlencoded({ extended: false }));
+//CORS
+app.use(cors());
 
 //Routes
 
