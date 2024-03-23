@@ -34,7 +34,7 @@ async function getFabricById(id: string) {
         //get fabric data
         const result = await FabricModel.findById({ _id: id });
         //if there is no such fabric
-        if (result === null) throw new Error(`Get error. There is no fabric with ID = ${id}`)
+        if (result === null) throw new Error(`Error GET. There is no fabric with ID = ${id}`)
         //return list of object
         return result;
 }
@@ -50,7 +50,7 @@ async function updateFabric(changedData: any, id: string, created_by: Types.Obje
         //try to update fabric data
         const result = await FabricModel.findOneAndUpdate({ _id: id, created_by: created_by }, changedData, { new: true });
         //if there is no such fabric or it is created by different user - throw error
-        if (result === null) throw new Error(`Update error. Current user did not create fabric with ID = ${id}`)
+        if (result === null) throw new Error(`Error PATCH. Current user did not create fabric with ID = ${id}`)
         //return list of object
         return result;
 }
@@ -65,7 +65,7 @@ async function deleteFabric(id: string, created_by: Types.ObjectId) {
         //try to update fabric data
         const result = await FabricModel.findOneAndDelete({ _id: id, created_by: created_by });
         //if there is no such fabric or it is created by different user - throw error
-        if (result === null) throw new Error(`Delete error. Current user did not create fabric with ID = ${id}`)
+        if (result === null) throw new Error(`Error DELETE. Current user did not create fabric with ID = ${id}`)
         //return list of object
         return result;
 }

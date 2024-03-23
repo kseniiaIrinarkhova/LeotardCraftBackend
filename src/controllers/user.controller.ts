@@ -17,7 +17,7 @@ export default class UserController {
     async registerOne(req: Request, res: Response) {
         try {
             const token = await userServices.register(req.body);
-            return res.status(201).json({ data: token, message: "User has beed created." });
+            return res.status(201).json({ data: [token], message: "Success POST. User has beed created." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -32,7 +32,7 @@ export default class UserController {
     async loginOne(req: Request, res: Response) {
         try {
             const token = await userServices.login(req.body);
-            res.status(200).json({ data: token });
+            res.status(200).json({ data: [token], message: "Success POST. User logged in." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -51,7 +51,7 @@ export default class UserController {
             //get user data
             const user = await userServices.getUserById((req.token as IUserTokenPayload).user._id)
             //return result
-            return res.status(200).json({ data: user });
+            return res.status(200).json({ data: [user], message: "Success GET. Get user information" });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -70,7 +70,7 @@ export default class UserController {
             //get user data
             const updatedUser = await userServices.updateUser(req.body, (req.token as IUserTokenPayload).user._id)
             //return updated user
-            return res.status(200).send({ data: updatedUser, message: "User has been updated." });
+            return res.status(200).send({ data: updatedUser, message: "Success PATCH. User has been updated." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -89,7 +89,7 @@ export default class UserController {
             //try to delete user and get information about deleted user
             const deletedUser = await userServices.deleteUser((req.token as IUserTokenPayload).user._id)
             //return information about deleted user
-            return res.status(200).send({ data: deletedUser, message: "User has been deleted." });
+            return res.status(200).send({ data: [deletedUser], message: "Succress DELETE. User has been deleted." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }

@@ -14,7 +14,7 @@ export default class ProjectController {
         try {
             const newProject: IProject = { created_by: (req.token as IUserTokenPayload).user._id, ...req.body }
             const project = await projectServices.createOne(newProject);
-            return res.status(201).json({ data: project, message: "Project has beed created." });
+            return res.status(201).json({ data: [project], message: "Success POST. Project has beed created." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -28,7 +28,7 @@ export default class ProjectController {
     async getAllProjects(req: ICustomRequest, res: Response) {
         try {
             const userProjects = await projectServices.getAllProjectByUserID((req.token as IUserTokenPayload).user._id);
-            return res.status(200).json({ data: userProjects });
+            return res.status(200).json({ data: userProjects, message: "Success GET. All user's projects" });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -49,7 +49,7 @@ export default class ProjectController {
             //get project data
             const project = await projectServices.getProjectById(id, (req.token as IUserTokenPayload).user._id)
             //return result
-            return res.status(200).json({ data: project });
+            return res.status(200).json({ data: [project], message: `Success GET. Project ID=${id} information` });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -70,7 +70,7 @@ export default class ProjectController {
             //get rhinstone data
             const updatedProject = await projectServices.updateProject(req.body, id, (req.token as IUserTokenPayload).user._id)
             //return updated user
-            return res.status(200).send({ data: updatedProject, message: "Project has been updated." });
+            return res.status(200).send({ data: [updatedProject], message: "Success PATCH. Project has been updated." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -91,7 +91,7 @@ export default class ProjectController {
             //try to delete rhinstone and get information about deleted rhinstone
             const deletedProject = await projectServices.deleteProject(id, (req.token as IUserTokenPayload).user._id)
             //return information about deleted user
-            return res.status(200).send({ data: deletedProject, message: "Project has been deleted." });
+            return res.status(200).send({ data: [deletedProject], message: "Success DELETE. Project has been deleted." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }

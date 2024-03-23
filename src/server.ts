@@ -45,9 +45,9 @@ app.use('/api/projects', projectRoutes);
 const startDB = async () => {
     try {
         await connectDB(connectionString);
-        console.log('Mongodb is connected!!!')
+        console.log('[database]: Mongodb is connected.')
         app.listen(port, () => {
-            console.log(`[server]: Server is running at http://localhost:${port}`);
+            console.log(`[server]: Server is running.`);
         })
     } catch (error) {
         console.log(error);

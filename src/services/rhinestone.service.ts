@@ -34,7 +34,7 @@ async function getRhinestoneById(id: string) {
     //get rhinestone data
     const result = await RhinestoneModel.findById({ _id: id });
     //if there is no such rhinestone
-    if (result === null) throw new Error(`Get error. There is no rhinestone with ID = ${id}`)
+    if (result === null) throw new Error(`Error GET. There is no rhinestone with ID = ${id}`)
     //return list of object
     return result;
 }
@@ -50,7 +50,7 @@ async function updateRhinestone(changedData: any, id: string, created_by: Types.
     //try to update rhinestone data
     const result = await RhinestoneModel.findOneAndUpdate({ _id: id, created_by: created_by }, changedData, { new: true });
     //if there is no such rhinestone or it is created by different user - throw error
-    if (result === null) throw new Error(`Update error. Current user did not create rhinestone with ID = ${id}`)
+    if (result === null) throw new Error(`Error PATCH. Current user did not create rhinestone with ID = ${id}`)
     //return updated object
     return result;
 }
@@ -65,7 +65,7 @@ async function deleteRhinestone(id: string, created_by: Types.ObjectId) {
     //try to update rhinestone data
     const result = await RhinestoneModel.findOneAndDelete({ _id: id, created_by: created_by });
     //if there is no such rhinestone or it is created by different user - throw error
-    if (result === null) throw new Error(`Delete error. Current user did not create rhinestone with ID = ${id}`)
+    if (result === null) throw new Error(`Error DELETE. Current user did not create rhinestone with ID = ${id}`)
     //return list of object
     return result;
 }
@@ -94,6 +94,18 @@ async function getRhinestonesByType(created_by: Types.ObjectId, type: string) {
     //return list of object
     return result;
 }
+/**
+ * Function that finds rhinestone document with provided size from DB
+ * @param created_by user ID (user that try to update) 
+ * @param size rhinestone size
+ * @returns result of action
+ */
+async function getRhinestonesBySize(created_by: Types.ObjectId, size: string) {
+    //try to get rhinestone data
+    const result = await getRhinestonesWithFilters(created_by, '','',size)
+    //return list of object
+    return result;
+}
 
 /**
  * Function that finds rhinestone document with provided filters
@@ -113,4 +125,4 @@ async function getRhinestonesWithFilters(created_by: Types.ObjectId, type: strin
 
 }
 
-export { createOne, getAllRhinestoneByUserID, getRhinestoneById, updateRhinestone, deleteRhinestone, getRhinestonesByColor, getRhinestonesByType, getRhinestonesWithFilters };
+export { createOne, getAllRhinestoneByUserID, getRhinestoneById, updateRhinestone, deleteRhinestone, getRhinestonesByColor, getRhinestonesByType, getRhinestonesWithFilters, getRhinestonesBySize };

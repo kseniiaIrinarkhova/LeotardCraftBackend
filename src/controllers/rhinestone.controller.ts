@@ -14,7 +14,7 @@ export default class RhinestoneController {
         try {
             const newRhinestone: IRhinestone = { created_by: (req.token as IUserTokenPayload).user._id, ...req.body }
             const rhinestone = await rhinestoneServices.createOne(newRhinestone);
-            return res.status(201).json({ data: rhinestone , message: "Rhinestone has beed created." });
+            return res.status(201).json({ data: [rhinestone], message: "Success POST. Rhinestone has beed created." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -37,7 +37,7 @@ export default class RhinestoneController {
                 userRhinestones = await rhinestoneServices.getAllRhinestoneByUserID((req.token as IUserTokenPayload).user._id);
             else
                 userRhinestones = await rhinestoneServices.getRhinestonesWithFilters((req.token as IUserTokenPayload).user._id, type, color, size)
-            return res.status(200).json({ data: userRhinestones });
+            return res.status(200).json({ data: userRhinestones, message: "Success GET. All required user's rhinestones" });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -60,7 +60,7 @@ export default class RhinestoneController {
             //get rhinestone data
             const rhinestone = await rhinestoneServices.getRhinestoneById(id)
             //return result
-            return res.status(200).json({ data: rhinestone });
+            return res.status(200).json({ data: [rhinestone], message: `Success GET. Rhinestone ID=${id} information` });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -79,9 +79,9 @@ export default class RhinestoneController {
             //get id parameter
             const { id } = req.params;
             //get rhinstone data
-            const updatedRhinestone = await rhinestoneServices.updateRhinestone(req.body, id, (req.token as IUserTokenPayload).user._id )
+            const updatedRhinestone = await rhinestoneServices.updateRhinestone(req.body, id, (req.token as IUserTokenPayload).user._id)
             //return updated user
-            return res.status(200).send({ data: updatedRhinestone, message: "Rhinestone has been updated." });
+            return res.status(200).send({ data: [updatedRhinestone], message: "Success PATCH. Rhinestone has been updated." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -100,9 +100,9 @@ export default class RhinestoneController {
             //get id parameter
             const { id } = req.params;
             //try to delete rhinstone and get information about deleted rhinstone
-            const deletedRhinestone = await rhinestoneServices.deleteRhinestone(id, (req.token as IUserTokenPayload).user._id) 
+            const deletedRhinestone = await rhinestoneServices.deleteRhinestone(id, (req.token as IUserTokenPayload).user._id)
             //return information about deleted user
-            return res.status(200).send({ data: deletedRhinestone, message: "Rhinestone has been deleted." });
+            return res.status(200).send({ data: [deletedRhinestone], message: "Success DELETE. Rhinestone has been deleted." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -111,7 +111,7 @@ export default class RhinestoneController {
  * Get all rhinestone with specific type
  * @param req request with token data
  * @param res resonse
- * @returns result of delete operation
+ * @returns result of selection
  */
     async getRhinestoneByType(req: ICustomRequest, res: Response) {
         try {
@@ -121,7 +121,7 @@ export default class RhinestoneController {
             const { type } = req.params;
             //try to get rhinestone with this type
             const result = await rhinestoneServices.getRhinestonesByType((req.token as IUserTokenPayload).user._id, type);
-            return res.status(200).send({ data: result });
+            return res.status(200).send({ data: result, message: `Success GET. All user's rhinestones with type = ${type}` });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -130,7 +130,7 @@ export default class RhinestoneController {
     * Get all rhinestone with specific color
     * @param req request with token data
     * @param res resonse
-    * @returns result of delete operation
+    * @returns result of selection
     */
     async getRhinestoneByColor(req: ICustomRequest, res: Response) {
         try {
@@ -140,7 +140,26 @@ export default class RhinestoneController {
             const { color } = req.params;
             //try to get rhinestone with this type
             const result = await rhinestoneServices.getRhinestonesByColor((req.token as IUserTokenPayload).user._id, color);
-            return res.status(200).send({ data: result });
+            return res.status(200).send({ data: result, message: `Success GET. All user's rhinestones with color = ${color}` });
+        } catch (err) {
+            return res.status(500).json({ message: getErrorMessage(err) });
+        }
+    }
+    /**
+* Get all rhinestone with specific color
+* @param req request with token data
+* @param res resonse
+* @returns result of selection
+*/
+    async getRhinestoneBySize(req: ICustomRequest, res: Response) {
+        try {
+            //check if we recieved token ( we have to, as we call this path afte auth middleware)
+            if (!req.token) throw new Error("error with token")
+            //get parameter
+            const { size } = req.params;
+            //try to get rhinestone with this type
+            const result = await rhinestoneServices.getRhinestonesBySize((req.token as IUserTokenPayload).user._id, size);
+            return res.status(200).send({ data: result, message: `Success GET. All user's rhinestones with size = ${size}` });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }

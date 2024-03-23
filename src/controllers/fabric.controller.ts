@@ -15,7 +15,7 @@ export default class FabricController {
         try {
             const newFabric: IFabric = { created_by: (req.token as IUserTokenPayload).user._id, ...req.body }
             const fabric = await fabricServices.createOne(newFabric);
-            return res.status(201).json({ data: fabric, message: "Fabric has beed created." });
+            return res.status(201).json({ data: [fabric], message: "Success POST. Fabric has beed created." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -37,7 +37,7 @@ export default class FabricController {
                 userFabrics = await fabricServices.getAllFabricByUserID((req.token as IUserTokenPayload).user._id);
             else
                 userFabrics = await fabricServices.getFabricsWithFilters((req.token as IUserTokenPayload).user._id, type, color)
-            return res.status(200).json({ data: userFabrics });
+            return res.status(200).json({ data: userFabrics, message: "Success GET. All required user's fabric" });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -58,7 +58,7 @@ export default class FabricController {
             //get fabric data
             const fabric = await fabricServices.getFabricById(id)
             //return result
-            return res.status(200).json({ data: fabric });
+            return res.status(200).json({ data: [fabric], message: `Success GET. Fabric ID=${id} information` });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -79,7 +79,7 @@ export default class FabricController {
             //get fabric data
             const updatedFabric = await fabricServices.updateFabric(req.body, id, (req.token as IUserTokenPayload).user._id)
             //return updated user
-            return res.status(200).send({ data: updatedFabric, message: "Fabric has been updated." });
+            return res.status(200).send({ data: [updatedFabric], message: "Success PATCH. Fabric has been updated." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -100,7 +100,7 @@ export default class FabricController {
             //try to delete fabric and get information about deleted fabric
             const deletedFabric = await fabricServices.deleteFabric(id, (req.token as IUserTokenPayload).user._id)
             //return information about deleted user
-            return res.status(200).send({ data: deletedFabric, message: "Fabric has been deleted." });
+            return res.status(200).send({ data: [deletedFabric], message: "Success DELETE. Fabric has been deleted." });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -120,7 +120,7 @@ export default class FabricController {
             const { type } = req.params;
             //try to get fabric with this type
             const result = await fabricServices.getFabricsByType((req.token as IUserTokenPayload).user._id, type);
-            return res.status(200).send({ data: result });
+            return res.status(200).send({ data: result, message: `Success GET. All user's fabrics with type = ${type}` });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }
@@ -139,7 +139,7 @@ export default class FabricController {
             const { color } = req.params;
             //try to get fabric with this type
             const result = await fabricServices.getFabricsByColor((req.token as IUserTokenPayload).user._id, color);
-            return res.status(200).send({ data: result });
+            return res.status(200).send({ data: result, message: `Success GET. All user's fabrics with color = ${color}` });
         } catch (err) {
             return res.status(500).json({ message: getErrorMessage(err) });
         }

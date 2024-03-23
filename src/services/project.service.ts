@@ -34,7 +34,7 @@ async function getProjectById(id: string, created_by: Types.ObjectId) {
     //get project data
     const result = await ProjectModel.findOne({ _id: id, created_by: created_by });
     //if there is no such project
-    if (result === null) throw new Error(`Get error. Current user did not create project with ID = ${id}`)
+    if (result === null) throw new Error(`Error GET. Current user did not create project with ID = ${id}`)
     //return list of object
     return result;
 }
@@ -50,7 +50,7 @@ async function updateProject(changedData: any, id: string, created_by: Types.Obj
     //try to update project data
     const result = await ProjectModel.findOneAndUpdate({ _id: id, created_by: created_by }, changedData, { new: true });
     //if there is no such project or it is created by different user - throw error
-    if (result === null) throw new Error(`Update error. Current user did not create project with ID = ${id}`)
+    if (result === null) throw new Error(`Error PATCH. Current user did not create project with ID = ${id}`)
     //return list of object
     return result;
 }
@@ -65,7 +65,7 @@ async function deleteProject(id: string, created_by: Types.ObjectId) {
     //try to update project data
     const result = await ProjectModel.findOneAndDelete({ _id: id, created_by: created_by });
     //if there is no such project or it is created by different user - throw error
-    if (result === null) throw new Error(`Delete error. Current user did not create project with ID = ${id}`)
+    if (result === null) throw new Error(`Error DELETE. Current user did not create project with ID = ${id}`)
     //return list of object
     return result;
 }

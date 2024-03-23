@@ -21,5 +21,5 @@ router.route('/')
 //specific search routes
 router.get('/types/:type', auth, rhinestoneController.getRhinestoneByType)
 router.get('/colors/:color', auth, rhinestoneController.getRhinestoneByColor)
-
+router.get('/sizes/:size', auth, rhinestoneController.getRhinestoneBySize)
 export default router;
