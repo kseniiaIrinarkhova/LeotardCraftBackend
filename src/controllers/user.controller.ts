@@ -34,7 +34,7 @@ export default class UserController {
             const token = await userServices.login(req.body);
             res.status(200).json({ data: [token], message: "Success POST. User logged in." });
         } catch (err) {
-            return res.status(500).json({ message: getErrorMessage(err) });
+            return res.status(401).json({ message: getErrorMessage(err) });
         }
     }
 

@@ -1,6 +1,8 @@
-import { IProject } from '../types/main';
+import { IFabric, IProject, IRhinestone, ProjectFabric } from '../types/main';
 import ProjectModel from '../models/Project.model'
 import { Types } from 'mongoose';
+import Fabric from '../models/Fabric.model';
+import Rhinestone from '../models/Rhinestone.model';
 
 /**
  * Function that creates project document in db
@@ -32,7 +34,7 @@ async function getAllProjectByUserID(created_by: Types.ObjectId) {
  */
 async function getProjectById(id: string, created_by: Types.ObjectId) {
     //get project data
-    const result = await ProjectModel.findOne({ _id: id, created_by: created_by });
+    let result = await ProjectModel.findOne({ _id: id, created_by: created_by });
     //if there is no such project
     if (result === null) throw new Error(`Error GET. Current user did not create project with ID = ${id}`)
     //return list of object

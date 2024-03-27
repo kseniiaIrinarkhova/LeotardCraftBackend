@@ -869,7 +869,7 @@ All routes need authentication token.
 ## Projects API
 All routes need authentication token.
 1. ### Get All users projects
-- API end point : `/projects`
+- API end point : `/api/projects`
 - API method: `GET`
 - response body:
 ```
@@ -928,7 +928,7 @@ All routes need authentication token.
 ``` 
 
 2. ##### Create new project
-- API end point : `/projects`
+- API end point : `/api/projects`
 - API method: `POST`
 - request body: rhinestones, fabric, notes, imgs - optional properties
 ```

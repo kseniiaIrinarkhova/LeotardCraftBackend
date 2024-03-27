@@ -158,6 +158,8 @@ type ProjectRhinestone = {
          * foreign key to Rhinestone
          */
     rhinestone_id: Types.ObjectId;
+    /**rhinestone info */
+    rhinestone?: IRhinestone | null;
     /**
      * amount of rhinestones
      */
@@ -176,6 +178,8 @@ type ProjectFabric = {
          * foreign key to Fabric
          */
     fabric_id: Types.ObjectId;
+    /**fabric info */
+    fabric: (IFabric & { _id: Types.ObjectId }) | null;
     /**
      * fabric quantity 
      */
@@ -212,4 +216,4 @@ interface IFilter {
     } | Types.ObjectId
 }
 //export
-export { IUser, ICustomRequest, IUserTokenPayload, UserUpdatedData, IRhinestone, RhinestonesType, IFabric, IProject, IFilter }
+export { IUser, ICustomRequest, IUserTokenPayload, UserUpdatedData, IRhinestone, RhinestonesType, IFabric, IProject, IFilter,ProjectRhinestone,ProjectFabric }
